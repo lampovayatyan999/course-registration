@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(max_length=50)
     image_url = models.URLField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     
