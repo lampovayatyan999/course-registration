@@ -45,6 +45,29 @@
    python manage.py runserver
    ```
    Сервер будет доступен на `http://127.0.0.1:8000`
+   
+5. ## Курсы
+Курсы управляются через Django Admin.
+Форма регистрации загружает список курсов через API `/api/courses/`.
+
+Перед тестированием необходимо создать хотя бы один курс в админ-панели.
+
+Пример:
+- Название: «Backend»
+- Описание: «Описание для проверки»
+- Цена: 10000
+- Изображение: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLtN09hU5IwpyL04A4F5be87wjrgLQ7ZEbtA&s
+
+- Название: Frontend
+- Описание: «Описание для проверки»
+- Цена: 5000
+- Изображение: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrDo7aNtLm_0pkiFKI2_ykGO3WmtYeo4iSJA&s
+
+- Название: Full-stack
+- Описание: «Описание для проверки»
+- Цена: 5000
+- Изображение:  https://cdto.work/wp-content/uploads/2021/04/art_full_img.jpg
+
 
 ### Frontend (React + Vite)
 
