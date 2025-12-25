@@ -1,4 +1,5 @@
 export async function registerUser(data) {
+    {/* API call to register a user for a course */}
     const response = await fetch("http://127.0.0.1:8000/api/registrations/", {
         method: "POST",
         headers: {

@@ -3,13 +3,14 @@ import InputField from "./InputField";
 import { registerUser } from "../services/register";
 
 export default function RegistrationForm() {
-    const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
+    const [loading, setLoading] = React.useState(false); // for loading state
+    const [success, setSuccess] = React.useState(false); // for successful registration
     const [error, setError] = React.useState(null); // for general errors
     const [errors, setErrors] = React.useState({}); // for field errors
-    const [courses, setCourses] = React.useState([]);
-    const [selectedCourse, setSelectedCourse] = React.useState(null);
+    const [courses, setCourses] = React.useState([]); // for courses list
+    const [selectedCourse, setSelectedCourse] = React.useState(null); // for selected course
 
+    // Fetch courses from the API when the component renders firstly
     React.useEffect(() => {
         fetch("http://127.0.0.1:8000/api/courses/")
             .then(response => response.json())
@@ -17,6 +18,7 @@ export default function RegistrationForm() {
             .catch(err => console.log("Ошибка при загрузке курсов:", err));
     }, []);
 
+    // Form data state
     const [formData, setFormData] = React.useState({
         student_name: "",
         email: "",
@@ -24,6 +26,7 @@ export default function RegistrationForm() {
         course: ""
     });
 
+    // Field validation function
     const validateField = (name, value) => {
         switch(name) {
             case "student_name":
@@ -44,7 +47,7 @@ export default function RegistrationForm() {
         }
     }
 
-
+    // Handle input changes
     function handleChange(event) {
         const {name, value } = event.target;
         // update form data
@@ -53,30 +56,37 @@ export default function RegistrationForm() {
             [name]: value
         }));
 
+        // real-time validation
         setErrors(prevErrors => ({
             ...prevErrors,
             [name]: validateField(name, value)
         }));
 
+        // if a course is selected, find the course object
         if(name === "course") {
             const course = courses.find(c => c.id === Number(value));
             setSelectedCourse(course || null);
         }
 }
 
+    // submitting the form
     async function handleSubmit(event) {
         event.preventDefault();
+
+        // reset states
         setLoading(true);
         setError(null);
         setErrors({});
         setSuccess(false);
 
+        // validate all fields before submission
         const newErrors = {};
         Object.keys(formData).forEach(key => {
             const err = validateField(key, formData[key]);
             if (err) newErrors[key] = err;
         });
 
+        // if there are validation errors, set them and stop submission
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setLoading(false);
@@ -84,9 +94,11 @@ export default function RegistrationForm() {
         }
 
         try {
+            // backend request
             await registerUser(formData);
             setSuccess(true);
         } catch (error) {
+            // if backend returns field errors
             if (typeof error === 'object') {
                 setErrors(error);
             }
@@ -131,6 +143,7 @@ export default function RegistrationForm() {
                     error={errors.phone}
                 />
 
+                {/* Selected course card */}
                 <div className="form-group">
                     <label>Course</label>
                     <select className="select-course" name="course" value={formData.course} onChange={handleChange} >
@@ -152,6 +165,7 @@ export default function RegistrationForm() {
             </form>
         </div>
 
+        {/* Selected course card */}
         <div>
             {selectedCourse && (
                 <div className="course-card">
